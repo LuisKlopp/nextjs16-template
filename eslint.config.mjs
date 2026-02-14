@@ -1,18 +1,47 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { FlatCompat } from "@eslint/eslintrc";
+import nextPlugin from "@next/eslint-plugin-next";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import prettierConfig from "eslint-config-prettier";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-export default eslintConfig;
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const config = [
+  ...compat.extends("plugin:@typescript-eslint/recommended"),
+  ...compat.extends("prettier"),
+
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    plugins: {
+      "@next/next": nextPlugin,
+      "simple-import-sort": simpleImportSort,
+    },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
+
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+      "no-unused-vars": "off",
+
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
+
+      ...prettierConfig.rules,
+    },
+  },
+];
+
+export default config;
