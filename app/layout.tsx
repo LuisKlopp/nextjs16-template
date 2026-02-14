@@ -2,6 +2,7 @@ import "../styles/globals.css";
 
 import type { Metadata } from "next";
 
+import ReactQueryProvider from "@/provider/react-query-provider";
 import { dmDisplay, pretendard } from "@/public/fonts/fonts";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.className} ${dmDisplay.variable}`}>
-        {children}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
   );
