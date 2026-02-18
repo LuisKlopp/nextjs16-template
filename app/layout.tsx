@@ -2,7 +2,7 @@ import "../styles/globals.css";
 
 import type { Metadata } from "next";
 
-import ReactQueryProvider from "@/provider/react-query-provider";
+import ReactQueryProvider from "@/providers/react-query-provider";
 import { dmDisplay, pretendard } from "@/public/fonts/fonts";
 
 export const metadata: Metadata = {
